@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Postar Notícias</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="news" class="content-section">
+        <h2>Postar Notícias</h2>
+        <form id="newsForm">
+            <input 
+                type="text" 
+                name="title" 
+                placeholder="Título da notícia" 
+                required 
+            />
+            <input 
+                type="text" 
+                name="message" 
+                placeholder="Mensagem da notícia" 
+                required 
+            />
+            <input 
+                type="file" 
+                name="image" 
+                accept="image/*" 
+                required 
+            />
+            <input 
+                type="text" 
+                name="link" 
+                placeholder="Link da notícia" 
+                required 
+            />
+            <button type="submit">Adicionar Notícia</button>
+        </form>
+
+        <h3>Lista de Notícias</h3>
+        <div id="newsList"></div>
+    </div>
+
+    <script>
+        const newsForm = document.getElementById('newsForm');
+        const newsListContainer = document.getElementById('newsList');
+
+        // Função para carregar as notícias do localStorage
+        function loadNews() {
+            const newsList = JSON.parse(localStorage.getItem('newsList')) || [];
+            newsListContainer.innerHTML = ''; // Limpa a lista antes de adicionar
+
+            newsList.forEach((news, index) => {
+                const newsItem = document.createElement('div');
+                newsItem.className = 'news-item';
+                newsItem.innerHTML = `
+                    <img src="${news.image}" alt="${news.title}" />
+                    <h3>${news.title}</h3>
+                    <p>${news.message}</p>
+                    <a href="${news.link}" target="_blank" rel="noopener noreferrer">Leia mais</a>
+                    <button onclick="editNews(${index})">Editar</button>
+                    <button onclick="deleteNews(${index})">Remover</button>
+                `;
+                newsListContainer.appendChild(newsItem);
+            });
+        }
+
+        // Função para adicionar uma nova notícia
+        newsForm.addEventListener('submit', function(event) {
+            event.preventDefault(); // Impede o envio padrão do formulário
+
+            const formData = new FormData(this);
+            const newsData = {
+                title: formData.get('title'),
+                message: formData.get('message'),
+                image: '', // Inicializa a imagem como uma string vazia
+                link: formData.get('link')
+            };
+
+            // Lê o arquivo de imagem
+            const file = formData.get('image');
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                newsData.image = e.target.result; // Armazena a imagem como uma URL de dados
+                // Armazenar os dados no localStorage
+                let newsList = JSON.parse(localStorage.getItem('newsList')) || [];
+                newsList.push(newsData);
+                localStorage.setItem('newsList', JSON.stringify(newsList));
+
+                // Limpar o formulário após o envio
+                newsForm.reset();
+
+                // Recarregar a lista de notícias
+                loadNews();
+
+                // Opcional: Exibir uma mensagem de sucesso
+                alert('Notícia adicionada com sucesso!');
+            };
+            reader.readAsDataURL(file); // Lê o arquivo como uma URL de dados
+        });
+
+        // Função para editar uma notícia
+        function editNews(index) {
+            const newsList = JSON.parse(localStorage.getItem('newsList')) || [];
+            const news = newsList[index];
+
+            // Preencher o formulário com os dados da notícia
+            newsForm.title.value = news.title;
+            newsForm.message.value = news.message;
+            newsForm.link.value = news.link;
+
+            // Remover a notícia original
+            deleteNews(index);
+        }
+
+        // Função para remover uma notícia
+        function deleteNews(index) {
+            let newsList = JSON.parse(localStorage.getItem('newsList')) || [];
+            newsList.splice(index, 1); // Remove a notícia do array
+            localStorage.setItem('newsList', JSON.stringify(newsList)); // Atualiza o localStorage
+
+            // Recarregar a lista de notícias
+            loadNews();
+        }
+
+        // Carregar as notícias ao iniciar a página
+        window.onload = loadNews;
+    </script>
+</body>
+</html>

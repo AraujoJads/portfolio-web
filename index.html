@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Portfólio</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script type="text/javascript" src="https://cdn.emailjs.com/dist/email.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+    
+    <script src="config.js"></script>
+    <script type="text/babel">
+        const Navbar = () => {
+            const [isOpen, setIsOpen] = React.useState(false);
+            const [activeItem, setActiveItem] = React.useState('home');
+
+            const toggleMenu = () => {
+                setIsOpen(!isOpen);
+            };
+
+            const handleItemClick = (item) => {
+                setActiveItem(item);
+                setIsOpen(false); // Fecha o menu após a seleção
+
+                // Rolagem suave para a seção
+                const element = document.getElementById(item);
+                if (element) {
+                    element.scrollIntoView({ behavior: 'smooth' });
+                }
+            };
+
+            return (
+                <nav className="navbar">
+                    <h2>Antonio Alves</h2>
+                    <div className={`hamburger ${isOpen ? 'open' : ''}`} onClick={toggleMenu}>
+                        <div className="line"></div>
+                        <div className="line"></div>
+                        <div className="line"></div>
+                    </div>
+                    <ul className={`nav-links ${isOpen ? 'open' : ''}`}>
+                        <li className={activeItem === 'home' ? 'active' : ''}>
+                            <a href="#home" onClick={() => handleItemClick('home')}>Início</a>
+                        </li>
+                        <li className={activeItem === 'about' ? 'active' : ''}>
+                            <a href="#about" onClick={() => handleItemClick('about')}>Sobre</a>
+                        </li>
+                        <li className={activeItem === 'daily-projects' ? 'active' : ''}>
+                            <a href="#daily-projects" onClick={() => handleItemClick('daily-projects')}>Projeto 30 Dias</a>
+                        </li>
+                        <li className={activeItem === 'contact' ? 'active' : ''}>
+                            <a href="#contact" onClick={() => handleItemClick('contact')}>Contato</a>
+                        </li>
+                    </ul>
+                </nav>
+            );
+        };
+
+        const WelcomeScreen = ({ onClose }) => {
+            return (
+                <div className="welcome-screen">
+                    <div className="welcome-content">
+                        <h1>Seja Bem-vindo!</h1>
+                        <button onClick={onClose}>Vamos lá</button>
+                    </div>
+                </div>
+            );
+        };
+
+
+        const Home = () => {
+            return (
+                <div id="home" className="content-section home-container">
+                    <div className="text-container">
+                        <h1>Olá, eu sou o Antonio!</h1>
+                        <div className="typing-container">
+                            <span className="typing-text">Sou um desenvolvedor apaixonado por criação de jogos e Desenvolvimento Backend.</span>
+                        </div>
+                    </div>
+                    <img src='laptop.gif' alt="Laptop" />
+                </div>
+            );
+        };
+
+        const About = () => {
+            return (
+                <div id="about" className="content-section">
+                    <h2>Sobre</h2>
+                    <div className="about-container" id="primeiro">
+                        <img 
+                            src='perfil.jpg' 
+                            alt="perfil" 
+                            className="perfil-img" 
+                        />
+                        <p>
+                            Estudante de Ciência da Computação na Universidade de Fortaleza, com previsão de formatura para dezembro de 2025, com objetivo em seguir na área de desenvolvimento fullstack. Tenho 22 anos e estou em busca de aprimorar meus conhecimentos e habilidades, focando na construção de soluções completas, tanto no front-end quanto no back-end.
+                        </p>
+                    </div>
+                    <div className="about-container">
+                        <div className="about-info">
+                            <h2>
+                                Perfil
+                            </h2>
+
+                            <p>
+                               Eu ❤️ programar e prototipar.<br/> Sou um curioso apaixonado por 🧑🏽‍💻.
+                            </p>
+                            <h4>
+                                Nome:
+                            </h4>
+                            <p>
+                                Antonio Alves
+                            </p>
+                            <h4>
+                                Cargo:
+                            </h4>
+                            <p>
+                                FullStack Developer, Freelancer
+                            </p>
+                            <h4>
+                                GitHub:
+                            </h4>
+                            <p>
+                                <a href="https://github.com/AraujoJads" target="_blank">
+                                    AraujoJads
+                                </a>
+                            </p>
+
+                            <h4>
+                                Email:
+                            </h4>
+                            <p>
+                                antonioalvesaraujobr@gmail.com
+                            </p>
+                        </div>
+
+                        <div className="about-info">
+                            <h2>Habilidades</h2>
+                            <p>Meus conhecimentos</p>
+                            <div className="skill">
+                                <span>JavaScript</span>
+                                <div className="progress-bar">
+                                    <div className="progress" style={{ width: '70%' }}>70%</div>
+                                </div>
+                            </div>
+                            <div className="skill">
+                                <span>React</span>
+                                <div className="progress-bar">
+                                    <div className="progress" style={{ width: '70%' }}>70%</div>
+                                </div>
+                            </div>
+                            <div className="skill">
+                                <span>Node.js</span>
+                                <div className="progress-bar">
+                                    <div className="progress" style={{ width: '60%' }}>60%</div>
+                                </div>
+                            </div>
+                            <div className="skill">
+                                <span>HTML & CSS</span>
+                                <div className="progress-bar">
+                                    <div className="progress" style={{ width: '90%' }}>90%</div>
+                                </div>
+                            </div>
+                            <div className="skill">
+                                <span>Python</span>
+                                <div className="progress-bar">
+                                    <div className="progress" style={{ width: '70%' }}>70%</div>
+                                </div>
+                            </div>
+                            <div className="skill">
+                                <span>Java</span>
+                                <div className="progress-bar">
+                                    <div className="progress" style={{ width: '80%' }}>80%</div>
+                                </div>
+                            </div>
+                            <div className="skill">
+                                <span>Clojure</span>
+                                <div className="progress-bar">
+                                    <div className="progress" style={{ width: '50%' }}>50%</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const DailyProjects = () => {
+            const newsList = JSON.parse(localStorage.getItem('newsList')) || [];
+            
+            return (
+                <div id="daily-projects" className="content-section">
+                    <h2>Projeto 30 Dias</h2>
+                    <p> Durante 30 dias projetos de pequeno e médio porte serão desenvolvidos e postados aqui.</p>
+                    <div className="news-container">
+                        {newsList.length > 0 ? (
+                            newsList.map((news, index) => (
+                                <div className="news-item" key={index}>
+                                    <img src={news.image} alt={news.title} />
+                                    <h3>{news.title}</h3>
+                                    <p>{news.message}</p>
+                                    <a href={news.link} target="_blank" rel="noopener noreferrer">Leia mais</a>
+                                </div>
+                            ))
+                        ) : <p> Não há projetos disponíveis.</p>
+                        }
+                    </div>
+                </div>
+            );
+        };
+
+        const ContactForm = () => {
+            const sendEmail = (e) => {
+                e.preventDefault();
+
+                // Inicializa o EmailJS com o seu User ID
+                emailjs.init(userId);
+
+                // Envia o e-mail através do serviço e template configurados
+                emailjs.sendForm(serviceId, templateId, e.target)
+                    .then((result) => {
+                        alert("Mensagem enviada com sucesso!");
+                        console.log(result.text);
+                    }, (error) => {
+                        alert("Erro ao enviar a mensagem!");
+                        console.log(error.text);
+                    });
+            };
+
+            return (
+                <footer className="footer" id="contact">
+                    <h2>Contato</h2>
+                    <form className="contact-form" onSubmit={sendEmail}>
+                        <div>
+                            <label htmlFor="name">Nome:</label>
+                            <input type="text" id="name" name="name" required />
+                        </div>
+                        <div>
+                            <label htmlFor="email">E-mail:</label>
+                            <input type="email" id="email" name="email" required />
+                        </div>
+                        <div>
+                            <label htmlFor="message">Mensagem:</label>
+                            <textarea id="message" name="message" required></textarea>
+                        </div>
+                        <button type="submit">Enviar</button>
+                    </form>
+                </footer>
+            );
+        };
+
+        const App = () => {
+            const [showWelcome, setShowWelcome] = React.useState(true);
+
+            const handleCloseWelcome = () => {
+                setShowWelcome(false);
+            };
+
+            return (
+                <div>
+                    {showWelcome && <WelcomeScreen onClose={handleCloseWelcome} />}
+                    <Navbar />
+                    <Home />
+                    <About />
+                    <DailyProjects />
+                    <ContactForm />
+                </div>
+            );
+        };
+
+             ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+
+    <footer class="footer">
+    <p>&copy; 2024 Antonio Alves. Todos os direitos reservados.</p>
+    </footer>
+
+</body>
+</html>
